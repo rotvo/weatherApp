@@ -1,0 +1,119 @@
+
+<div class="row" *ngIf="loading === true">
+  <div class="col-12 d-flex justify-content-center">
+    <loading-spinner></loading-spinner>
+    <H1 class="pt-2">Cargando...</H1>
+  </div>
+</div>
+
+
+<div *ngIf="!loading" class="container text-center mt-5">
+  <div class="row">
+    
+    <div class="col-8">
+      <div class="d-flex flex-row-reverse bd-highlight p-3">
+        <button class="mx-1" mat-button (click)="getWeatherReport()">Consultar Nuevamente</button>
+        <button class="mx-1"mat-flat-button (click)="deleteCache()">Borrar cache</button>
+      </div>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+         <!-- Name Column -->
+         <ng-container matColumnDef="flight_num">
+          <th mat-header-cell *matHeaderCellDef> Numero De Vuelo </th>
+          <td mat-cell *matCellDef="let element"> {{element.flight_num}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="airline">
+          <th mat-header-cell *matHeaderCellDef> Aerolinea </th>
+          <td mat-cell *matCellDef="let element"> {{element.airline}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="origin">
+          <th mat-header-cell *matHeaderCellDef> Origen </th>
+          <td mat-cell *matCellDef="let element"> {{element.origin}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="destination">
+          <th mat-header-cell *matHeaderCellDef> Destino</th>
+          <td mat-cell *matCellDef="let element"> {{element.destination}} </td>
+        </ng-container>
+
+        
+        <ng-container matColumnDef="originWeather">
+          <th mat-header-cell *matHeaderCellDef> Clima Origen</th>
+          <td mat-cell *matCellDef="let element"> {{element.originWeather.main.temp}} °C </td>
+        </ng-container>
+
+         
+         <ng-container matColumnDef="destinationWeather">
+          <th mat-header-cell *matHeaderCellDef> Clima Destino</th>
+          <td mat-cell *matCellDef="let element"> {{element.destinationWeather.main.temp}} °C</td>
+        </ng-container>
+
+      
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-button (click)="viewDetails(element)">Detalles</button>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[10, 20,50]" [length]="totalRecords" [pageSize]="pageSize"
+        (page)="onPageChanged($event)">
+      </mat-paginator>
+    </div>
+    <div class="col-4" *ngIf="weatherOrigin.name || weatherOrigin.name">
+      <div class="">
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title class="text-start">Origen</mat-card-title>
+            <mat-card-subtitle class="text-start">{{weatherOrigin.name}}</mat-card-subtitle>
+            
+  
+          </mat-card-header>
+          <mat-card-content class="text-start">Temperatura Actual: {{weatherOrigin.main.temp}}°C </mat-card-content>
+          <!-- <mat-card-content>Descripción: {{weatherOrigin.weather[0].description}}</mat-card-content> -->
+          <mat-card-content class="text-start">Temperatura Minima: {{weatherOrigin.main.temp_min}}°C </mat-card-content>
+          <mat-card-content class="text-start">Temperatura Maxima: {{weatherOrigin.main.temp_max}}°C </mat-card-content>
+          <mat-card-content class="text-start">Humedad: {{weatherOrigin.main.humidity}}%</mat-card-content>
+          <mat-card-content class="text-start">Presión: {{weatherOrigin.main.pressure}}</mat-card-content>
+          <mat-card-footer class="example-card-footer">
+  
+            <p>{{weatherOrigin.weather[0].description}}</p>
+          </mat-card-footer>
+        </mat-card>
+      </div>
+      
+      <div class="mt-2">
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title class="text-start">Destino</mat-card-title>
+            <mat-card-subtitle class="text-start">{{weatherDestination.name}}</mat-card-subtitle>
+            
+
+          </mat-card-header>
+          <mat-card-content class="text-start">Temperatura Actual: {{weatherDestination.main.temp}}°C </mat-card-content>
+          <!-- <mat-card-content>Descripción: {{weatherDestination.weather[0].description}}</mat-card-content> -->
+          <mat-card-content class="text-start">Temperatura Minima:
+            {{weatherDestination.main.temp_min}}°C </mat-card-content>
+          <mat-card-content class="text-start">Temperatura Maxima:
+            {{weatherDestination.main.temp_max}}°C </mat-card-content>
+          <mat-card-content class="text-start">Humedad: {{weatherDestination.main.humidity}}%</mat-card-content>
+          <mat-card-content class="text-start">Presión: {{weatherDestination.main.pressure}}</mat-card-content>
+          <mat-card-footer class="example-card-footer">
+
+            <p>{{weatherDestination.weather[0].description}}</p>
+          </mat-card-footer>
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+</div>
