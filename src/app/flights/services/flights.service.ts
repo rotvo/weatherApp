@@ -10,6 +10,12 @@ import { environment } from '../../../environments/environment';
 export class FlightsService {
   private apiUrl: string = environment.apiUrl;
   constructor(private http: HttpClient) {
+    // Verifica si estás en localhost o en producción
+    if (window.location.hostname === 'localhost') {
+      this.apiUrl = 'http://localhost:3000/api'; 
+    } else {
+      this.apiUrl = 'https://weather-backend-livid.vercel.app/api';
+    }
   }
 
   getWeatherReport(page:number, pageSize:number) : Observable<ApiResponse<Flight>> {
